@@ -1,62 +1,26 @@
 {
-  "name": "sn_nodejs",
-  "version": "0.11.17",
-  "description": "NodeJS binding for SAFE API",
-  "main": "lib/index.js",
-  "author": "Josh Wilson <joshuef@gmail.com>",
-  "contributors": "Gabriel Viganotti <gabrielviganotti@gmail.com>",
-  "license": "(MIT OR BSD-3-Clause)",
+  "name": "sn_api",
+  "napi": {
+    "name": "sn_api"
+  },
+  "main": "sn_api.node",
+  "types": "./sn_api.d.ts",
+  "devDependencies": {
+    "@napi-rs/cli": "^1.0.0",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.1",
+    "typescript": "^4.1.5"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
   "scripts": {
-    "postinstall": "node scripts/postinstall.js",
-    "build": "neon build --release",
-    "build-mock": "cross-env RUSTFLAGS=\"--cfg feature=\\\"scl-mock\\\"\" yarn build",
-    "download-node-abi": "node-pre-gyp install --fallback-to-build=false || neon build --release",
-    "package": "node-pre-gyp package",
-    "package-electron": "yarn node-pre-gyp package --runtime=electron --target=8.4.0 --dist-url=https://electronjs.org/headers",
-    "package-electron7": "yarn node-pre-gyp package --runtime=electron --target=7.3.2 --dist-url=https://electronjs.org/headers",
-    "publish-gh-draft": "node-pre-gyp-github publish --release",
-    "neon-build-electron": "cross-env npm_config_target=8.4.0 npm_config_arch=x64 npm_config_disturl=https://electronjs.org/headers npm_config_runtime=electron neon build --release",
-    "neon-build-electron7": "cross-env npm_config_target=7.3.2 npm_config_arch=x64 npm_config_disturl=https://electronjs.org/headers npm_config_runtime=electron neon build --release",
-    "test-api": "yarn test --testPathIgnorePatterns auth",
-    "test-auth": "safe auth stop || true && yarn jest auth",
-    "test-with-mock": "yarn build-mock && yarn test --testPathIgnorePatterns auth",
-    "test-with-node": "yarn build && yarn test",
+    "build": "napi build",
     "test": "jest"
   },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/maidsafe/sn_nodejs.git"
-  },
-  "files": [
-    "native/index.node",
-    "lib",
-    "scripts"
-  ],
-  "binary": {
-    "module_name": "index",
-    "host": "https://github.com/maidsafe/sn_nodejs/releases/download/",
-    "remote_path": "v{version}",
-    "package_name": "{node_abi}-{platform}-{arch}.tar.gz",
-    "module_path": "./native",
-    "pkg_path": "."
-  },
-  "dependencies": {
-    "add": "^2.0.6",
-    "neon-cli": "^0.4.0",
-    "node-pre-gyp": "amilajack/node-pre-gyp#neon-compat",
-    "node-pre-gyp-github": "^1.4.3",
-    "yarn": "^1.17.3"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
-    "cross-env": "^7.0.2",
-    "husky": "^4.2.3",
-    "jest": "^25.2.4"
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "./tests-js/environment-safe",
+    "testTimeout": 500000
   }
 }
